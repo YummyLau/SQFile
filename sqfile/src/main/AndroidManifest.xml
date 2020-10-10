@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.effective.android.sqfile">
+
+    <application>
+        <provider
+            android:name=".SQFileProvider"
+            android:authorities="com.effective.android.sqfile.provider"
+            android:exported="false"
+            android:multiprocess="true" />
+    </application>
+</manifest>
