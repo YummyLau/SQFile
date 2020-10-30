@@ -4,7 +4,6 @@ import android.text.TextUtils
 import com.effective.android.sqfile.SQFUtils
 import com.effective.android.sqfile.SQFile
 import com.effective.android.sqfile.param.QueryParameter
-import com.effective.android.sqfile.param.SQFParameter
 import com.effective.android.sqfile.param.anno.ExpressionStrategy
 import com.effective.android.sqfile.result.ResultCallback
 import com.effective.android.sqfile.result.SQFResult
@@ -15,13 +14,15 @@ class QueryHandler(private val sqfParameter: QueryParameter) : SQFHandler() {
 
     override fun enqueue(responseCallback: ResultCallback) {
         SQFile.threadPoolExecutor.execute {
-            responseCallback.onResponse(execute())
+            SQFile.handler.post {
+                responseCallback.onResponse(execute())
+            }
         }
     }
 
     override fun execute(): SQFResult {
         val filePath = sqfParameter.fileScope.realPath()
-        val file = SQFUtils.getFile(filePath)
+        val file = SQFUtils.getFileByPath(filePath)
         if (file == null || !file.exists()) {
             return SQFResult(false, "文件($filePath)不存在")
         }
